@@ -1,0 +1,10 @@
+{% extends "app_base.html" %}
+{% block content %}
+{# include the first two lines above to extend the app_base template #}
+<center>
+  <h2>Current Time</h2> 
+  <br>
+  <p class="text-center">Current time is: {{ time }}</p>
+</center>
+{# also make sure to include this very last line as well #}
+{% endblock %}

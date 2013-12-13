@@ -1,0 +1,54 @@
+{# base template that other templates can build from. Specifies the title for the
+page and a navigation bar at the top
+see http://jinja.pocoo.org/docs/templates/#template-inheritance for more information #}
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>AuctionBase</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+  <style type="text/css">
+    body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .navbar {
+      margin-bottom: 20px;
+    }
+
+   table { table-layout: fixed; }
+   table th, table td { overflow: hidden; }
+
+   label {
+     font-weight: normal;
+   }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="navbar navbar-default" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="browse">AuctionBase</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="currtime">Current Time</a></li>
+          <li><a href="selecttime">Select a Time</a></li>
+          <li><a href="browse">Browse</a></li>
+          <li><a href="findauction">Find an Auction</a></li>
+        </ul>
+      </div>
+    </div>
+    {# specify content block so that other templates can use this template as a base #}
+    <div class="jumbotron">
+      <div id="content">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

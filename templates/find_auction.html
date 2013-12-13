@@ -1,0 +1,163 @@
+{% extends "app_base.html" %}
+{% block content %}
+{# include the first two lines above to extend the app_base template #}
+
+<script>
+function validateForm() {
+  var x = document.forms["placebid"]["amount"].value;
+  if (x == null || isNaN(x)) {
+    alert("Please input a valid number");
+    return false;
+  }
+}
+</script>
+
+<form class="form-horizontal" role="form" method="GET" action="findauction">
+  <div class="form-group">
+    <div class="col-sm-6">
+      <label>Find an Auction</label>
+    </div>
+    <div class="col-sm-6">
+      <div class="input-group">
+        <input class="form-control" type="text" id="itemid" name="itemid" placeholder="Enter Item ID">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+        </span>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% if status is defined %}
+<br>
+<p class="text-center">Auction Status: <b>{{status}}</b></p>
+<br>
+{% endif %}
+
+{% if item is defined %}
+<p class="text-center">Basic Information</p>
+<table class="table">
+  <tr>
+    <td width="20%">ItemID</td>
+    <td>{{item.ItemID}}</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td>{{item.Name}}</td>
+  </tr>
+  <tr>
+    <td>Current Price</td>
+    <td>{{item.Currently}}</td>
+  </tr>
+  <tr>
+    <td>Buy Price</td>
+    <td>{{item.Buy_Price}}</td>
+  </tr>
+  <tr>
+    <td>First Bid</td>
+    <td>{{item.First_Bid}}</td>
+  </tr>
+  <tr>
+    <td>Number of Bids</td>
+    <td>{{item.Number_of_Bids}}</td>
+  </tr>
+  <tr>
+    <td>Started</td>
+    <td>{{item.Started}}</td>
+  </tr>
+  <tr>
+    <td>Ends</td>
+    <td>{{item.Ends}}</td>
+  </tr>
+  <tr>
+    <td>SellerID</td>
+    <td>{{item.SellerID}}</td>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td>{{item.Description}}</td>
+  </tr>
+</table>
+<br>
+{% endif %}
+{% if categories is defined %}
+<table class="table table-bordered" align="center" style="width:40%;">
+  <tr>
+    <th style="text-align: center">Category</th>
+  </tr>
+{% for category in categories %}
+  <tr>
+    <td>{{category.Category}}</td>
+  </tr>
+{% endfor %}
+</table>
+<br>
+{% endif %}
+{% if bids is defined %}
+<p class="text-center">Bids</p>
+<table class="table">
+  <tr>
+    <th>ItemID</th>
+    <th>UserID</th>
+    <th>Time</th>
+    <th>Amount</th>
+  </tr>
+{% for bid in bids %}
+  <tr>
+    <td>{{bid.ItemID}}</td>
+    <td>{{bid.UserID}}</td>
+    <td>{{bid.Time}}</td>
+    <td>${{bid.Amount}}</td>
+  </tr>
+{% endfor %}
+</table>
+<br>
+{% endif %}
+
+{% if status is sameas 'OPEN' %}
+<div class="row">
+<p class="text-center">Interested in this item? Place a bid here!</p>
+<div class="col-sm-offset-4 col-sm-4">
+  <form name="placebid" class="form-horizontal" role="form" method="POST" action="placebid" onsubmit="return validateForm();">
+    <div class="form-group">
+      <label for="userid" class="control-label">UserID</label>
+      <input class="form-control" type="text" id="userid" name="userid" placeholder="Enter UserID">
+    </div>
+    <div class="form-group">
+      <label for="userid" class="control-label">Amount</label>
+      <input class="form-control" type="text" name="amount" placeholder="Enter your bid">
+    </div>
+    <div class="form-group">
+      <input type="hidden" name="itemid" value={{item.ItemID}}>
+      <input class="btn btn-default" type="submit" value="Bid!">
+    </div>
+  </form>
+</div>
+</div>
+{% endif %}
+{% if winner is defined %}
+<p class="text-center">The winner is <b>{{winner}}</b>. Congratulations!</p>
+{% endif %}
+
+{% if item is defined %}
+<br>
+<br>
+<br>
+<form class="form-horizontal" role="form" method="GET" action="findauction">
+  <div class="form-group">
+    <div class="col-sm-3">
+      <label>Find an Auction</label>
+    </div>
+    <div class="col-sm-9">
+      <div class="input-group">
+        <input class="form-control" type="text" id="itemid" name="itemid" placeholder="Enter Item ID">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+        </span>
+      </div>
+    </div>
+  </div>
+</form>
+{% endif %}
+{# also make sure to include this very last line as well #}
+{% endblock %}

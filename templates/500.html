@@ -1,0 +1,20 @@
+{% extends "app_base.html" %}
+{% block content %}
+{# include the first two lines above to extend app_base template #}
+{# also make sure to include this very last line as well #}
+<center>
+<p><b>Looks like something went wrong!</b></p>
+<br>
+<blockquote>
+  <p>To err is human; to forgive, divine.</p>
+  <small>Alexander Pope in <cite title="An Essay on Criticism"><em>An Essay on Criticism</em></cite></small>
+</blockquote>
+
+</center>
+<br>
+{% if error_type is defined and error_value is defined %}
+<p class="text-center">Details</p>
+<p class="text-center">{{error_type}}</p>
+<p class="text-center">{{error_value}}</p>
+{% endif %}
+{% endblock %}

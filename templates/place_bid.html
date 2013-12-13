@@ -1,0 +1,9 @@
+{% extends "app_base.html" %}
+{% block content %}
+<h2>Place a Bid</h2>
+<p align="center"> A bid is placed successfully.</p>
+<form align="center" method="GET" action="findauction">
+  <input type="hidden" name="itemid" value={{itemid}}>
+  <input class="btn btn-default" type="submit" value="Details">
+</form>
+{% endblock %}
