@@ -41,7 +41,7 @@ see http://jinja.pocoo.org/docs/templates/#template-inheritance for more informa
           <li><a href="browse">Browse</a></li>
           <li><a href="findauction">Find an Auction</a></li>
         </ul>
-        {% if username is not none %}
+        {% if (username is defined) and (username is not none) %}
         <ul class="nav navbar-nav navbar-right">
           <li><a href="profile">Hello, {{ username }} </a></li>
         </ul>
@@ -53,10 +53,8 @@ see http://jinja.pocoo.org/docs/templates/#template-inheritance for more informa
       </div>
     </div>
     {# specify content block so that other templates can use this template as a base #}
-    <div class="jumbotron">
-      <div id="content">
-        {% block content %}{% endblock %}
-      </div>
+    <div id="content">
+      {% block content %}{% endblock %}
     </div>
   </div>
 </body>

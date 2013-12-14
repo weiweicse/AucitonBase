@@ -1,62 +1,65 @@
 {% extends "app_base.html" %}
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
-<center>
-  <h2>Browse</h2>
-  <br>
-</center>
+<div class="jumbotron">
+  <center>
+    <h2>Browse</h2>
+    <br>
+  </center>
 
-<form align="center" class="form-inline" role="form" method="GET" action="browse">
-  <fieldset>
-  <div class="form-group">
-    <label for="price" class="col-sm-1 control-label">Price</label>
-    <div class="col-sm-2">
-      <select class="form-control" name="price" id="price">
-        <option value="0|100000">All</option>
-        <option value="0|25">Under $25</option>
-        <option value="25|50">$25 to $50</option>
-        <option value="50|100">$50 to $100</option>
-        <option value="100|200">$100 to $200</option>
-        <option value="200|100000">$200 &amp; Above</option>
-      </select>
-    </div>
-    <label class="col-sm-2 control-label" for="category">Category</label>
-    <div class="col-sm-2">
-      <select class="form-control" name="category" id="category">
-        <option value="All">All</option>
-        <option value="Clothing">Clothing</option>
-        <option value="Clothing &#38;amp&#59; Accessories">Clothing &amp; Accessories</option>
-        <option value="Collectibles">Collectibles</option>
-        <option value="Decorative &#38;amp&#59; Holiday">Decorative &amp; Holiday</option>
-        <option value="Decorative by Brand">Decorative by Brand</option>
-        <option value="Memorabilia">Memorabilia</option>
-        <option value="Men">Men</option>
-        <option value="Movie">Movie</option>
-        <option value="Movies &#38;amp&#59; Television">Movies &amp; Television</option>
-        <option value="Pop Culture">Pop Culture</option>
-        <option value="VHS">VHS</option>
-        <option value="Video, Film">Video, Film</option>
-        <option value="Women">Women</option>
-      </select>
-    </div>
-    <div class="col-sm-3">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="open" value="true" checked="checked"> Open
-        </label>
+  <form align="center" class="form-inline" role="form" method="GET" action="browse">
+    <fieldset>
+    <div class="form-group">
+      <label for="price" class="col-sm-1 control-label">Price</label>
+      <div class="col-sm-2">
+        <select class="form-control" name="price" id="price">
+          <option value="0|100000">All</option>
+          <option value="0|25">Under $25</option>
+          <option value="25|50">$25 to $50</option>
+          <option value="50|100">$50 to $100</option>
+          <option value="100|200">$100 to $200</option>
+          <option value="200|100000">$200 &amp; Above</option>
+        </select>
       </div>
-      <div class="checkbox">
-        <label>
-        <input type="checkbox" name="close" value="true" checked="checked"> Closed
-        </label>
+      <label class="col-sm-2 control-label" for="category">Category</label>
+      <div class="col-sm-2">
+        <select class="form-control" name="category" id="category">
+          <option value="All">All</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Clothing &#38;amp&#59; Accessories">Clothing &amp; Accessories</option>
+          <option value="Collectibles">Collectibles</option>
+          <option value="Decorative &#38;amp&#59; Holiday">Decorative &amp; Holiday</option>
+          <option value="Decorative by Brand">Decorative by Brand</option>
+          <option value="Memorabilia">Memorabilia</option>
+          <option value="Men">Men</option>
+          <option value="Movie">Movie</option>
+          <option value="Movies &#38;amp&#59; Television">Movies &amp; Television</option>
+          <option value="Pop Culture">Pop Culture</option>
+          <option value="VHS">VHS</option>
+          <option value="Video, Film">Video, Film</option>
+          <option value="Women">Women</option>
+        </select>
       </div>
-    </div>
-    <input type="hidden" name="submit" value="true">
-    <div class="col-sm-1">
-      <button type="submit"class="btn btn-default">Browse!</button>
-    </div>
-  </fieldset>
-</form>
+      <div class="col-sm-3">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="open" value="true" checked="checked"> Open
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+          <input type="checkbox" name="close" value="true" checked="checked"> Closed
+          </label>
+        </div>
+      </div>
+      <input type="hidden" name="submit" value="true">
+      <div class="col-sm-1">
+        <button type="submit"class="btn btn-default">Browse!</button>
+      </div>
+    </fieldset>
+  </form>
+
+</div>
 
 {% if items is defined %}
   <br>

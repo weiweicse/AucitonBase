@@ -134,3 +134,11 @@ def getAuctionByCondition(price_low, price_high, category, open_or_not, close_or
         query_string += ' and ItemID in (select ItemID from Category where Category = $category)'
     results = query(query_string + ' order by Number_of_Bids DESC', {'price_low': price_low, 'price_high': price_high, 'time': current_time, 'category': category})
     return results
+
+# verify user
+def verify(username, password):
+    query_string = 'select * from User where UserId = $username and Password = $password'
+    results = query(query_string, {'username': username, 'password': password})
+    if isResultEmpty(results):
+        return False
+    return True

@@ -12,12 +12,13 @@ function validateForm() {
 }
 </script>
 
+<div class="jumbotron">
 <form class="form-horizontal" role="form" method="GET" action="findauction">
   <div class="form-group">
-    <div class="col-sm-6">
+    <div class="col-md-6">
       <label>Find an Auction</label>
     </div>
-    <div class="col-sm-6">
+    <div class="col-md-6">
       <div class="input-group">
         <input class="form-control" type="text" id="itemid" name="itemid" placeholder="Enter Item ID">
         <span class="input-group-btn">
@@ -27,6 +28,7 @@ function validateForm() {
     </div>
   </div>
 </form>
+</div>
 
 {% if status is defined %}
 <br>
@@ -114,15 +116,12 @@ function validateForm() {
 <br>
 {% endif %}
 
-{% if status is sameas 'OPEN' %}
+{% if (status is sameas 'OPEN') and (username is not none) %}
 <div class="row">
-<p class="text-center">Interested in this item? Place a bid here!</p>
+  <p class="text-center">Hey, {{username}}. Interested in this item? Place a bid here!</p>
 <div class="col-sm-offset-4 col-sm-4">
   <form name="placebid" class="form-horizontal" role="form" method="POST" action="placebid" onsubmit="return validateForm();">
-    <div class="form-group">
-      <label for="userid" class="control-label">UserID</label>
-      <input class="form-control" type="text" id="userid" name="userid" placeholder="Enter UserID">
-    </div>
+    <input type="hidden" name="userid" value="{{username}}">
     <div class="form-group">
       <label for="userid" class="control-label">Amount</label>
       <input class="form-control" type="text" name="amount" placeholder="Enter your bid">

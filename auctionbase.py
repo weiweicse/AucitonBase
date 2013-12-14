@@ -201,20 +201,28 @@ class browse_auctions:
 
 class login:
     def GET(self):
-        session.loggedin = True
-        session.username = 'World'
-        return '<h1>You are logged in</h1>'
+        return render_template('login.html')
+
+    def POST(self):
+        username = web.input(username=None).username
+        password = web.input(password=None).password
+        if auth(username, password):
+            session.loggedin = True
+            session.username = username
+            raise web.seeother('/')
+        else:
+            raise web.seeother('/500')
 
 class logout:
     def GET(self):
         session.kill()
-        return '<h1>You are logged out</h1>'
+        return render_template('logout.html')
 
 class profile:
     def GET(self):
         if session.get('loggedin', False) == True:
-            return '<h1>You are logged in</h1><a href="/logout">log out</a>'
-        return '<h1>You are logged out</h1><a href="/login">log in</a>'
+            return render_template('profile.html', username = session.get('username', None))
+        return web.seeother('/500')
 
 class server_error:
 
@@ -235,6 +243,9 @@ def getAuctionStatus(current_time, started, ends, currently, buy_price):
         return "OPEN"
     else:
         return "NOT FOUND"
+
+def auth(username, password):
+    return sqlitedb.verify(username, password)
 
 
 ######################END HELPER METHODS######################
