@@ -56,10 +56,19 @@ urls = ('/currtime', 'curr_time',
         '/placebid', 'place_bid',
         '/browse', 'browse_auctions',
         '/500', 'server_error',
+        '/login', 'login',
+        '/logout', 'logout',
+        '/profile', 'profile',
         '/', 'browse_auctions',
         # TODO: add additional URLs here
         # first parameter => URL, second parameter => class name
         )
+
+web.config.debug = False
+web.internalerror = web.debugerror
+app = web.application(urls, globals())
+session = web.session.Session(app, web.session.DiskStore('sessions'))
+app.add_processor(web.loadhook(sqlitedb.enforceForeignKey))
 
 class curr_time:
     # A simple GET request, to '/currtime'
@@ -68,12 +77,12 @@ class curr_time:
     # in order to have its value displayed on the web page
     def GET(self):
         current_time = sqlitedb.getTime()
-        return render_template('curr_time.html', time = current_time)
+        return render_template('curr_time.html', time = current_time, username = session.get('username', None))
 
 class select_time:
     # Aanother GET request, this time to the URL '/selecttime'
     def GET(self):
-        return render_template('select_time.html')
+        return render_template('select_time.html', username = session.get('username', None))
 
     # A POST request
     #
@@ -99,21 +108,21 @@ class select_time:
 
         # Here, we assign `update_message' to `message', which means
         # we'll refer to it in our template as `message'
-        return render_template('select_time.html', message = update_message)
+        return render_template('select_time.html', message = update_message, username = session.get('username', None))
 
 class find_auction:
 
     def GET(self):
         item_id = web.input(itemid=None).itemid
         if item_id is None:
-            return render_template('find_auction.html')
+            return render_template('find_auction.html', username = session.get('username', None))
         else:
             # check the status of the current auction
             current_time = sqlitedb.getTime()
             item = sqlitedb.getItemById(item_id)
 
             if item is None:
-                return render_template('find_auction.html', status = "NOT FOUND")
+                return render_template('find_auction.html', status = "NOT FOUND", username = session.get('username', None))
 
 
             # calculate current price
@@ -128,7 +137,7 @@ class find_auction:
             # check the current status of the auction
             status = getAuctionStatus(current_time, item.Started, item.Ends, item.Currently, item.Buy_Price)
             if status == "NOT FOUND":
-                return render_template('find_auction.html', status = status)
+                return render_template('find_auction.html', status = status, username = session.get('username', None))
 
             # modify values inside item to make it consistent with the current timestamp
             bids = sqlitedb.getBidsByItemID(item_id, current_time)
@@ -138,10 +147,10 @@ class find_auction:
                 
                 item.Number_of_Bids = number_of_bids
                 item.Currently = current_price
-                return render_template('find_auction.html', item = item, categories = categories, bids = bids, status = status)
+                return render_template('find_auction.html', item = item, categories = categories, bids = bids, status = status, username = session.get('username', None))
             else:
                 winner = sqlitedb.getWinner(item_id)
-                return render_template('find_auction.html', item = item, categories = categories, bids = bids, status = status, winner = winner)
+                return render_template('find_auction.html', item = item, categories = categories, bids = bids, status = status, winner = winner, username = session.get('username', None))
 
 
 class place_bid:
@@ -169,7 +178,7 @@ class place_bid:
         else:
             t.commit()
 
-        return render_template('place_bid.html', itemid = item_id)
+        return render_template('place_bid.html', itemid = item_id, username = session.get('username', None))
 
 # category, open/close, price
 class browse_auctions:
@@ -186,9 +195,26 @@ class browse_auctions:
             price_low = price[0]
             price_high = price[1]
             items = sqlitedb.getAuctionByCondition(price_low, price_high, category, open_or_not, close_or_not)
-            return render_template('browse.html', items = items)
+            return render_template('browse.html', items = items, username = session.get('username', None))
         elif submit == "false":
-            return render_template('browse.html')
+            return render_template('browse.html', username = session.get('username', None))
+
+class login:
+    def GET(self):
+        session.loggedin = True
+        session.username = 'World'
+        return '<h1>You are logged in</h1>'
+
+class logout:
+    def GET(self):
+        session.kill()
+        return '<h1>You are logged out</h1>'
+
+class profile:
+    def GET(self):
+        if session.get('loggedin', False) == True:
+            return '<h1>You are logged in</h1><a href="/logout">log out</a>'
+        return '<h1>You are logged out</h1><a href="/login">log in</a>'
 
 class server_error:
 
@@ -198,7 +224,7 @@ class server_error:
         if error_type is None or error_value is None:
             return render_template('500.html')
         else:
-            return render_template('500.html', error_type = error_type, error_value = error_value)
+            return render_template('500.html', error_type = error_type, error_value = error_value, username = session.get('username', None))
 
 ######################BEGIN HELPER METHODS######################
 
@@ -218,7 +244,4 @@ def getAuctionStatus(current_time, started, ends, currently, buy_price):
 ###########################################################################################
 
 if __name__ == '__main__':
-    web.internalerror = web.debugerror
-    app = web.application(urls, globals())
-    app.add_processor(web.loadhook(sqlitedb.enforceForeignKey))
     app.run()
